@@ -193,6 +193,7 @@ textarea{min-height:120px;resize:vertical}
 .pilot .what p{color:var(--ink-2);margin-top:6px}
 @media(max-width:860px){.pilot .cols{grid-template-columns:1fr}}
 
+.thanks{padding:24px 0}.thanks h3{font-size:1.6rem}.thanks p{margin-top:10px;font-size:1.15rem;color:var(--ink-2)}
 /* footer */
 footer{background:var(--ocean);color:#9DB2C2;padding:48px 0;font-size:.92rem}
 footer .f{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
@@ -548,7 +549,15 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
 
 <script>
 document.getElementById('y').textContent=new Date().getFullYear();
-(function(){const f=document.getElementById('pilot-form');if(!f)return;f.addEventListener('submit',e=>{if(f.action.includes('REPLACE_ME')){e.preventDefault();const n=f.querySelector('button');n.textContent='Form not connected yet — email uri@deepsignals.tech';n.disabled=true;}});})();
+(function(){const f=document.getElementById('pilot-form');if(!f)return;
+  f.addEventListener('submit',async e=>{
+    e.preventDefault();const b=f.querySelector('button[type=submit]');b.disabled=true;b.textContent='Sending…';
+    try{
+      const r=await fetch(f.action,{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'}});
+      if(r.ok){f.innerHTML='<div class="thanks"><h3>Thank you from Deep Signals.</h3><p>See you underground.</p><p class="muted">We will come back to you within two working days.</p></div>';}
+      else{throw new Error('bad status');}
+    }catch(err){b.disabled=false;b.textContent='Send';let m=f.querySelector('.err');if(!m){m=document.createElement('p');m.className='err muted';f.appendChild(m);}m.textContent='Something went wrong. Please email uri@deepsignals.tech instead.';}
+  });})();
 function toggleMenu(b){const m=document.getElementById('menu');const o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)}
 document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('menu').classList.remove('open')}));
 
