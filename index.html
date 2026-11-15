@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Signals — Before you drill, know what is underground</title>
+<meta name="description" content="Deep Signals builds physics-based AI that reads raw seismic data and tells you what is actually in the ground before you drill. Exploration and offshore infrastructure. Patent pending.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1C3750; --teal:#3382A3; --teal-dk:#246A87; --ocean:#0C1E2E; --ocean-2:#12304A;
+  --sand:#E9A83B; --sand-dk:#C9891E;
+  --paper:#F4F8FA; --paper-2:#E6EEF2; --ink:#142230; --ink-2:#3C4C5A; --ink-3:#6B7A87; --line:#D3DEE5;
+  --max:1120px; --r:14px;
+  --font:'Manrope',system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--paper);line-height:1.55;font-size:17px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;line-height:1.12;letter-spacing:-.02em;font-weight:800}
+h1{font-size:clamp(2.4rem,5.6vw,4.2rem)}
+h2{font-size:clamp(1.8rem,3.4vw,2.6rem)}
+h3{font-size:1.35rem;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--teal-dk)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+section{padding:96px 0}
+.lead{font-size:1.2rem;color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:700;text-decoration:none;font-size:1rem;border:2px solid transparent;transition:background .15s,color .15s,border-color .15s}
+.btn-sand{background:var(--sand);color:var(--ocean)}
+.btn-sand:hover{background:#F2B954}
+.btn-ghost{color:#fff;border-color:rgba(255,255,255,.35)}
+.btn-ghost:hover{border-color:#fff}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-navy:hover{background:#25486A}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sand);outline-offset:3px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(12,30,46,.86);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.nav img{height:30px;display:block}
+.nav ul{list-style:none;margin:0;padding:0;display:flex;gap:28px;align-items:center}
+.nav ul a{color:#D6E3EB;text-decoration:none;font-weight:600;font-size:.95rem}
+.nav ul a:hover{color:#fff}
+.nav .btn{padding:10px 16px;font-size:.92rem}
+.menu-btn{display:none;background:none;border:0;color:#fff;font:inherit;font-weight:700;padding:8px}
+@media(max-width:860px){
+  .nav ul{display:none;position:absolute;left:0;right:0;top:68px;background:var(--ocean);flex-direction:column;align-items:flex-start;padding:16px 24px 24px;gap:16px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .nav ul.open{display:flex}
+  .menu-btn{display:block}
+}
+
+/* hero */
+.hero{position:relative;background:var(--ocean);color:#fff;padding:0;overflow:hidden;min-height:clamp(640px,92vh,920px);display:flex;flex-direction:column;justify-content:flex-end}
+.slides{position:absolute;inset:0}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.6s ease;transform:scale(1.04)}
+.slide.on{opacity:1;transform:scale(1);transition:opacity 1.6s ease,transform 7s linear}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,30,46,.92) 0%,rgba(12,30,46,.6) 45%,rgba(12,30,46,.1) 100%),linear-gradient(0deg,rgba(12,30,46,.85) 0%,rgba(12,30,46,0) 45%)}
+.hero .caption{position:absolute;right:24px;bottom:18px;color:#9DB2C2;font-size:.82rem;font-weight:600}
+@media(prefers-reduced-motion:reduce){.slide{transition:none;transform:none}}
+.hero .wrap{position:relative;padding-top:140px;padding-bottom:72px}
+.hero h1{max-width:14ch}
+.hero .lead{color:#C9D8E2;margin-top:22px;max-width:50ch}
+.hero .cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.hero .note{margin-top:56px;color:#9DB2C2;font-size:.92rem;display:flex;gap:26px;flex-wrap:wrap}
+.hero .note span{display:flex;align-items:center;gap:8px}
+.hero .note i{width:8px;height:8px;border-radius:50%;background:var(--sand);display:inline-block}
+
+/* router */
+.router{background:var(--navy);color:#fff;padding:0}
+.router .grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.router a{display:block;padding:44px 36px;text-decoration:none;color:#fff;border-right:1px solid rgba(255,255,255,.12);transition:background .15s}
+.router a:last-child{border-right:0}
+.router a:hover{background:#25486A}
+.router .q{color:#9DB2C2;font-weight:600;margin-bottom:6px}
+.router h3{color:#fff;font-size:1.6rem;margin-top:6px}
+.router p{color:#C9D8E2;margin-top:10px;max-width:40ch}
+.router .status{display:inline-block;margin-top:18px;padding:5px 12px;border-radius:999px;font-size:.85rem;font-weight:700;background:rgba(255,255,255,.1)}
+.router .status.live{background:var(--sand);color:var(--ocean)}
+@media(max-width:760px){.router .grid{grid-template-columns:1fr}.router a{border-right:0;border-bottom:1px solid rgba(255,255,255,.12)}}
+
+/* problem */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+.stat{border-top:3px solid var(--teal);padding-top:18px}
+.stat b{display:block;font-size:clamp(2.4rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;color:var(--navy);line-height:1}
+.stat p{margin-top:12px;color:var(--ink-2);max-width:28ch}
+.stat small{display:block;margin-top:10px;color:var(--ink-3);font-size:.8rem}
+@media(max-width:760px){.stats{grid-template-columns:1fr}}
+
+/* how */
+.how{background:#fff}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:48px}
+.three h3{margin-bottom:10px}
+.three p{color:var(--ink-2)}
+.three svg{width:64px;height:64px;margin-bottom:18px;display:block}
+@media(max-width:760px){.three{grid-template-columns:1fr}}
+.patent{margin-top:40px;color:var(--ink-3);font-size:.95rem}
+
+/* markets */
+.markets{background:var(--paper-2)}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px}
+.panel{background:#fff;border-radius:var(--r);padding:40px;border:1px solid var(--line);display:flex;flex-direction:column}
+.panel .tag{align-self:flex-start;padding:5px 12px;border-radius:999px;font-size:.85rem;font-weight:700;background:var(--paper-2);color:var(--navy)}
+.panel .tag.live{background:var(--sand);color:var(--ocean)}
+.panel h3{font-size:1.7rem;margin-top:18px}
+.panel p{margin-top:14px;color:var(--ink-2)}
+.panel ul{margin:18px 0 0;padding-left:20px;color:var(--ink-2)}
+.panel li{margin-bottom:8px}
+.panel .foot{margin-top:auto;padding-top:26px}
+@media(max-width:860px){.panels{grid-template-columns:1fr}}
+
+/* detail sections */
+.detail .cols{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:start;margin-top:40px}
+.detail ul{padding-left:20px;color:var(--ink-2);margin:0}
+.detail li{margin-bottom:10px}
+.detail .side{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:32px}
+.detail .side h4{font-size:1.05rem;margin-bottom:12px}
+.detail .side p{color:var(--ink-2)}
+.detail .side + .side{margin-top:20px}
+.detail .pill{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.85rem;font-weight:700;margin-bottom:18px}
+.pill.dev{background:var(--paper-2);color:var(--navy)}
+.pill.live{background:var(--sand);color:var(--ocean)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{position:relative;padding-left:44px;margin-bottom:14px;color:var(--ink-2)}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+@media(max-width:860px){.detail .cols{grid-template-columns:1fr;gap:36px}}
+.alt{background:#fff}
+
+/* galleries */
+.gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:36px}
+.gallery figure,.single{margin:0}
+.gallery img,.single img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;display:block;border:1px solid var(--line)}
+.single img{aspect-ratio:16/9}
+figcaption{font-size:.85rem;color:var(--ink-3);margin-top:8px;font-weight:600}
+.single{margin-bottom:20px}
+@media(max-width:860px){.gallery{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.gallery{grid-template-columns:1fr 1fr}}
+/* traction */
+.traction{background:var(--ocean);color:#fff}
+.traction h2{color:#fff}
+.traction .lead{color:#C9D8E2}
+.tr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px}
+.tr{border-left:2px solid var(--sand);padding-left:18px}
+.tr b{display:block;font-size:1.9rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.tr p{color:#C9D8E2;margin-top:8px;font-size:.98rem}
+@media(max-width:860px){.tr-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.tr-grid{grid-template-columns:1fr}}
+
+/* why now */
+.why .box{background:var(--navy);color:#fff;border-radius:var(--r);padding:56px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.why h2{color:#fff}
+.why p{color:#C9D8E2;margin-top:16px;max-width:55ch}
+.why .slots{text-align:center}
+.why .slots b{display:block;font-size:4.2rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--sand)}
+.why .slots span{color:#C9D8E2}
+.why .btn{margin-top:28px}
+@media(max-width:860px){.why .box{grid-template-columns:1fr;padding:40px 28px}}
+
+/* technology */
+.tech .three{margin-top:48px}
+.field-wrap{position:relative;margin-top:40px;border-radius:var(--r);overflow:hidden;background:var(--ocean);aspect-ratio:16/7}
+.field-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.field-note{position:absolute;left:24px;bottom:20px;color:#C9D8E2;font-weight:600;max-width:36ch}
+.rigour{margin-top:56px;padding:32px;border-left:4px solid var(--sand);background:#fff;border-radius:0 var(--r) var(--r) 0}
+.rigour p{color:var(--ink-2);max-width:70ch}
+
+/* team */
+.team{background:#fff}
+.people{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:48px}
+.person img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);display:block;filter:saturate(.9)}
+.person h3{margin-top:18px;font-size:1.2rem}
+.person .role{color:var(--teal-dk);font-weight:700;margin-top:4px}
+.person p{color:var(--ink-2);margin-top:10px;font-size:.98rem}
+@media(max-width:760px){.people{grid-template-columns:1fr}}
+.about-copy{max-width:72ch;color:var(--ink-2);margin-top:28px}
+.about-copy p+p{margin-top:16px}
+
+/* pilot */
+.pilot{background:var(--paper-2)}
+.pilot .cols{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:40px}
+form{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:32px;display:grid;gap:16px}
+label{display:grid;gap:6px;font-weight:600;font-size:.95rem}
+input,select,textarea{font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+textarea{min-height:120px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+.pilot .what h4{margin-top:22px;font-size:1.05rem}
+.pilot .what p{color:var(--ink-2);margin-top:6px}
+@media(max-width:860px){.pilot .cols{grid-template-columns:1fr}}
+
+/* footer */
+footer{background:var(--ocean);color:#9DB2C2;padding:48px 0;font-size:.92rem}
+footer .f{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+footer img{height:26px;display:block;margin-bottom:10px}
+footer a{color:#D6E3EB;text-decoration:none}
+footer a:hover{color:#fff}
+footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" aria-label="Deep Signals home"><img src="assets/logo-white.png" alt="Deep Signals"></a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu" onclick="toggleMenu(this)">Menu</button>
+    <ul id="menu">
+      <li><a href="#exploration">Exploration</a></li>
+      <li><a href="#infrastructure">Infrastructure</a></li>
+      <li><a href="#technology">Technology</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a class="btn btn-sand" href="#pilot">Talk to us about a pilot</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="slides" aria-hidden="true">
+    <div class="slide" style="background-image:url(assets/img/oilrig.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/wind.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/port.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/onshore_rig.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/pipe.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/train.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/tunnel2.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/tunnel1.jpg)"></div>
+  </div>
+  </div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="wrap">
+    <h1>Before you drill, know what is underground.</h1>
+    <p class="lead">Physics-based AI that reads raw seismic data and tells you what is actually in the ground — before the well is committed, before the boreholes are drilled.</p>
+    <div class="cta">
+      <a class="btn btn-sand" href="#pilot">Talk to us about a pilot</a>
+      <a class="btn btn-ghost" href="#technology">See how it works</a>
+    </div>
+    <div class="note">
+      <span><i></i>Pilot phase: exploration and infrastructure</span>
+      <span><i></i>Closing pilots with operators and asset owners</span>
+      <span><i></i>Patent pending</span>
+    </div>
+  </div>
+  <div class="caption" id="cap"></div>
+</section>
+
+<section class="router">
+  <div class="wrap grid">
+    <a href="#exploration">
+      <p class="q">What is your application?</p>
+      <h3>Exploration</h3>
+      <p>Oil and gas prospects in frontier basins, with no well control. Critical minerals on the roadmap.</p>
+      <span class="status live">Pilot phase</span>
+    </a>
+    <a href="#infrastructure">
+      <p class="q">&nbsp;</p>
+      <h3>Infrastructure</h3>
+      <p>Offshore wind, ports, desalination and power: the ground between the boreholes.</p>
+      <span class="status live">Pilot phase</span>
+    </a>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap">
+    <h2>The decision is still made by eye.</h2>
+    <p class="lead" style="margin-top:18px">Seismic images show the shape of the layers. The answer — what is in them — is buried under everything above the target. Today that answer is inferred from a processed picture, and the industry pays for the gap.</p>
+    <div class="stats">
+      <div class="stat"><b>&gt;75%</b><p>of exploration wells fail to find a commercial reservoir.</p><small>AAPG; Westwood Energy 2025; Rystad Energy 2025</small></div>
+      <div class="stat"><b>$67B</b><p>lost every year to dry holes and the delays they cause.</p><small>Deep Signals market analysis, 2026</small></div>
+      <div class="stat"><b>1.5–7%</b><p>of an offshore project's cost goes to boreholes that say nothing about the ground between them.</p><small>Deep Signals market analysis, 2026</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <h2>Read the raw data. Answer the real question.</h2>
+    <div class="three">
+      <div>
+        <svg viewBox="0 0 64 64" fill="none" stroke="#3382A3" stroke-width="2.5" stroke-linecap="round"><path d="M4 32h8l4-10 5 20 5-24 5 28 5-18 4 4h20"/></svg>
+        <h3>Raw, pre-stack data in</h3>
+        <p>We work on the recorded wavefield, before processing discards the information that matters.</p>
+      </div>
+      <div>
+        <svg viewBox="0 0 64 64" fill="none" stroke="#3382A3" stroke-width="2.5" stroke-linecap="round"><path d="M6 14h52M6 26h52M6 38h52"/><path d="M32 6v46" stroke="#E9A83B"/><path d="M26 46l6 6 6-6" stroke="#E9A83B"/><rect x="22" y="50" width="20" height="8" rx="2" stroke="#E9A83B"/></svg>
+        <h3>Physics all the way down</h3>
+        <p>Our models follow the signal to the target and back, so the answer is grounded in wave physics, not in pattern-matching.</p>
+      </div>
+      <div>
+        <svg viewBox="0 0 64 64" fill="none" stroke="#3382A3" stroke-width="2.5" stroke-linecap="round"><rect x="8" y="10" width="48" height="44" rx="6"/><path d="M20 33l8 8 16-18" stroke="#E9A83B"/></svg>
+        <h3>An answer you can act on</h3>
+        <p>A clear verdict on the target, explainable, with no well logs required.</p>
+      </div>
+    </div>
+    <p class="patent">Patent pending. We do not publish the method; we are happy to discuss it under NDA.</p>
+  </div>
+</section>
+
+<section class="markets">
+  <div class="wrap">
+    <h2>Two markets, one engine.</h2>
+    <div class="panels">
+      <div class="panel">
+        <span class="tag live">Pilot phase</span>
+        <h3>Exploration</h3>
+        <p>A go/no-go verdict on a prospect from the seismic alone, in basins where nothing has been drilled yet.</p>
+        <ul>
+          <li>Closing pilot agreements with several oil and gas operators</li>
+          <li>Critical-minerals targets on the roadmap</li>
+        </ul>
+        <div class="foot"><a class="btn btn-navy" href="#exploration">Exploration in detail</a></div>
+      </div>
+      <div class="panel">
+        <span class="tag live">Pilot phase</span>
+        <h3>Infrastructure</h3>
+        <p>A virtual borehole between the physical ones: soil type and strength, layer by layer, trained on the site's own data.</p>
+        <ul>
+          <li>Pilot in execution with Israel Ports Company</li>
+          <li>In discussion with offshore asset owners on the next pilots</li>
+        </ul>
+        <div class="foot"><a class="btn btn-navy" href="#infrastructure">Infrastructure in detail</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="traction">
+  <div class="wrap">
+    <h2>Where we are</h2>
+    <div class="tr-grid">
+      <div class="tr"><b>Pilot running</b><p>Israel Ports Company; stage 1 complete across 24 borehole locations.</p></div>
+      <div class="tr"><b>94%</b><p>correct soil classification (rock vs sand) in a sea trial of about 450 samples.</p></div>
+      <div class="tr"><b>Several</b><p>pilot agreements being closed with oil and gas operators and offshore asset owners.</p></div>
+      <div class="tr"><b>Patent pending</b><p>on the core method.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="detail" id="exploration">
+  <div class="wrap">
+    <span class="pill live">Exploration · pilot phase</span>
+    <h2>A verdict on the prospect, before the well.</h2>
+    <p class="lead" style="margin-top:18px">Physics-based AI that classifies the target from raw, pre-stack seismic — without well logs, in basins where nothing has been drilled yet.</p>
+    <div class="gallery" aria-label="Seismic volumes">
+      <figure><img src="assets/img/anticline.jpg" alt="Seismic volume with an anticline trap and two wells" loading="lazy"><figcaption>Anticline trap</figcaption></figure>
+      <figure><img src="assets/img/faults.jpg" alt="Seismic volume cut by normal faults" loading="lazy"><figcaption>Fault blocks</figcaption></figure>
+      <figure><img src="assets/img/salt.jpg" alt="Seismic volume with a salt diapir" loading="lazy"><figcaption>Salt diapir</figcaption></figure>
+      <figure><img src="assets/img/dhi.jpg" alt="Seismic volume showing a bright spot" loading="lazy"><figcaption>Direct hydrocarbon indicator</figcaption></figure>
+      <figure><img src="assets/img/channel.jpg" alt="Time slice showing a channel system" loading="lazy"><figcaption>Channel system</figcaption></figure>
+    </div>
+    <div class="cols">
+      <div>
+        <h3>The problem</h3>
+        <p style="margin:12px 0 28px;color:var(--ink-2)">More than three in four exploration wells miss. Each one costs on the order of $20M onshore, $60M in shallow water and $200M in deep water. The decision rests on a processed image interpreted by experts, and the false positives that look like hydrocarbons and are not — fizz water, low-saturation gas — are the expensive ones.</p>
+        <h3>What Deep Signals delivers</h3>
+        <ul style="margin-top:12px">
+          <li>A classification of the target: commercial reservoir, or not.</li>
+          <li>From the pre-stack data you already own. No well ties, no nearby calibration wells.</li>
+          <li>Explainable: every verdict traces back to physics, not to a black box.</li>
+          <li>Delivered per prospect, on your timeline, before the drilling decision.</li>
+        </ul>
+        <h3 style="margin-top:28px">Where it fits</h3>
+        <p style="margin-top:12px;color:var(--ink-2)">Frontier and under-explored basins where well control is sparse; portfolio ranking before a drilling campaign; a second opinion on a high-impact well. We work alongside your existing interpretation workflow rather than replacing it.</p>
+      </div>
+      <div>
+        <div class="side">
+          <h4>Status and pilots</h4>
+          <p>Exploration is in its pilot phase. We are closing pilot agreements with several oil and gas operators, including advanced negotiation with an operator active in India, Mozambique and Brazil.</p>
+          <p style="margin-top:12px">A pilot partner provides pre-stack data for one or more prospects. We return a classification with its physics-based rationale, benchmarked against the drilling outcome where one exists.</p>
+          <a class="btn btn-navy" href="#pilot" style="margin-top:22px">Talk to us about an exploration pilot</a>
+        </div>
+        <div class="side">
+          <h4>Critical minerals</h4>
+          <p>The same physics applies wherever seismic data carries information about what fills the rock. Sediment-hosted and offshore mineral targets are on our roadmap.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="detail alt" id="infrastructure">
+  <div class="wrap">
+    <span class="pill live">Infrastructure · pilot phase</span>
+    <h2>Know the ground between the boreholes.</h2>
+    <p class="lead" style="margin-top:18px">A virtual borehole from shallow seismic — soil type and strength, layer by layer, for offshore wind, ports, desalination and power.</p>
+    <div class="cols">
+      <div>
+        <h3>The problem</h3>
+        <p style="margin:12px 0 28px;color:var(--ink-2)">Marine site investigation is slow, expensive and sparse. A single offshore borehole costs on the order of $85,000; a large investigation runs to hundreds of them over 12–18 months before FID, and still leaves every metre between the boreholes unknown. Design margins absorb that uncertainty, and the project pays twice: in the drilling and in the conservatism.</p>
+        <h3>What Deep Signals delivers</h3>
+        <ul style="margin-top:12px">
+          <li>Soil type and strength between physical boreholes, layer by layer from the seabed down.</li>
+          <li>Trained on the site's own boreholes, so results are calibrated to your ground, not a generic model.</li>
+          <li>Fewer boreholes, placed where they matter; the rest of the site covered by geophysics.</li>
+          <li>An explainable output your geotechnical engineer can interrogate.</li>
+        </ul>
+        <h3 style="margin-top:28px">How we work with you</h3>
+        <ol class="steps" style="margin-top:14px">
+          <li>A geophysical survey at market rates — valuable on its own, whatever the model outcome.</li>
+          <li>We share in the verified drilling savings against an agreed baseline.</li>
+          <li>If model confidence is low, you run the original plan and pay only for the survey. No penalty.</li>
+        </ol>
+      </div>
+      <div>
+        <figure class="single"><img src="assets/img/shallow.jpg" alt="Shallow seismic volume with boreholes colour-coded by soil type" loading="lazy"><figcaption>The ground between the boreholes, layer by layer</figcaption></figure>
+        <div class="side">
+          <h4>Pilot in execution</h4>
+          <p>We are running a pilot with Israel Ports Company. Stage 1 — bathymetry and sub-bottom profiling across 24 borehole locations — is complete. In a sea trial, soil type (rock vs sand) was classified correctly 94% of the time across about 450 samples.</p>
+          <p style="margin-top:12px">We are in discussion with offshore asset owners on the next pilots. Four to five slots are open for 2027.</p>
+          <a class="btn btn-navy" href="#pilot" style="margin-top:22px">Talk to us about an infrastructure pilot</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="wrap">
+    <div class="box">
+      <div>
+        <h2>The cost of waiting is a number.</h2>
+        <p>Every exploration well drilled on a picture is a $20–200M bet. Every offshore site investigation drilled on a grid pays for boreholes it did not need and still leaves gaps between them.</p>
+        <p>We run a limited number of pilots each year. Pilot partners shape the product and get first access to it.</p>
+        <a class="btn btn-sand" href="#pilot">Talk to us about a pilot</a>
+      </div>
+      <div class="slots"><b>4–5</b><span>pilot slots open for 2027</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="tech" id="technology">
+  <div class="wrap">
+    <h2>Physics first. Then the AI.</h2>
+    <p class="lead" style="margin-top:18px">What makes a Deep Signals answer different from an interpretation.</p>
+    <div class="field-wrap"><canvas id="field" aria-label="Animation: a wave travels from the surface down to a target layer and back"></canvas><div class="field-note">The signal goes down to the target and comes back. We read what came back.</div></div>
+    <div class="three">
+      <div>
+        <h3>The picture is not the answer</h3>
+        <p>Conventional workflows process seismic into an image of layer geometry, then interpret it. The information about what is inside the target is distorted by everything above it, and partly discarded on the way to the image.</p>
+      </div>
+      <div>
+        <h3>We go to the target and back</h3>
+        <p>Our models work on the raw, pre-stack wavefield and account for the full path of the sound — down through the overburden to the target and back to the surface — so the target's own response can be read.</p>
+      </div>
+      <div>
+        <h3>Physics makes it explainable</h3>
+        <p>Because the models are built on wave propagation and rock physics, every output can be traced to a physical cause. No well logs are needed, which is why it works where nothing has been drilled.</p>
+      </div>
+    </div>
+    <div class="rigour">
+      <h3>Rigour</h3>
+      <p style="margin-top:10px">Our models are developed and validated against physically rigorous simulated surveys before they meet field data, and benchmarked against drilling outcomes in pilots. Patent pending: we do not publish the method, and we are happy to discuss it under NDA.</p>
+    </div>
+  </div>
+</section>
+
+<section class="team" id="about">
+  <div class="wrap">
+    <h2>Deep Signals</h2>
+    <div class="about-copy">
+      <p>Deep Signals builds physics-based AI for subsurface characterisation. Today's workflow interprets a processed seismic image by eye; the decisive information about the target is buried under everything above it. Our engine works on the raw, pre-stack data instead, following the wavefield down to the target and back, and returns an explainable answer grounded in physics. No well logs are required, so it works where nothing has been drilled yet.</p>
+      <p>The engine serves two markets. In exploration it gives operators a clear verdict on a prospect before the well is committed. In offshore infrastructure it acts as a virtual borehole, classifying soil type and strength between physical boreholes for ports, offshore wind, desalination and power projects. Deep Signals is in its pilot phase in both markets: running with offshore asset owners, and closing agreements with several oil and gas operators. Founded in Israel; based in Haifa. Patent pending.</p>
+    </div>
+    <div class="people">
+      <div class="person">
+        <img src="assets/uri.jpg" alt="Dr. Uri Kushnir">
+        <h3>Dr. Uri Kushnir</h3>
+        <p class="role">Co-founder, CEO</p>
+        <p>PhD in ferroelectric materials. Hydrographer and former research-institute director.</p>
+      </div>
+      <div class="person">
+        <img src="assets/nadav.jpg" alt="Nadav Dadon">
+        <h3>Nadav Dadon</h3>
+        <p class="role">Co-founder, CTO</p>
+        <p>[Two lines from CV — to confirm]</p>
+      </div>
+      <div class="person">
+        <img src="assets/harel.jpg" alt="Harel Kalamaki">
+        <h3>Harel Kalamaki</h3>
+        <p class="role">Co-founder, COO</p>
+        <p>[Two lines from CV — to confirm]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pilot" id="pilot">
+  <div class="wrap">
+    <h2>Talk to us about a pilot.</h2>
+    <p class="lead" style="margin-top:18px">We run a limited number of pilots each year. Tell us about your site or prospect and we will come back to you within two working days.</p>
+    <div class="cols">
+      <form id="pilot-form" action="https://formspree.io/f/REPLACE_ME" method="POST">
+        <div class="row2">
+          <label>Name<input name="name" required autocomplete="name"></label>
+          <label>Company<input name="company" required autocomplete="organization"></label>
+        </div>
+        <div class="row2">
+          <label>Role<input name="role"></label>
+          <label>Email<input name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <label>Application
+          <select name="application" required>
+            <option value="">Choose one</option>
+            <option>Exploration</option>
+            <option>Infrastructure</option>
+            <option>Investor</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Your site or prospect<textarea name="message" placeholder="Location, data you have, timeline"></textarea></label>
+        <button class="btn btn-navy" type="submit">Send</button>
+        <p class="muted" style="font-size:.9rem">Or email <a href="mailto:uri@deepsignals.tech">uri@deepsignals.tech</a>. NDA available on request.</p>
+      </form>
+      <div class="what">
+        <h3>What a pilot looks like</h3>
+        <h4>Scope</h4><p>One site or one to three prospects, agreed up front with clear success criteria.</p>
+        <h4>What we need</h4><p>Exploration: pre-stack seismic for the prospect. Infrastructure: a geophysical survey (we can run it) plus the site's existing borehole data.</p>
+        <h4>What you get back</h4><p>A classification with its physics-based rationale, benchmarked against drilling outcomes where they exist, and a working session with our team.</p>
+        <h4>Confidentiality</h4><p>Your data stays yours. NDA before any data changes hands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap f">
+    <div>
+      <img src="assets/logo-white.png" alt="Deep Signals">
+      <p>Before you drill, know what is underground.</p>
+      <p style="margin-top:6px">Haifa, Israel · <a href="mailto:uri@deepsignals.tech">uri@deepsignals.tech</a></p>
+    </div>
+    <ul>
+      <li><a href="#exploration">Exploration</a></li>
+      <li><a href="#infrastructure">Infrastructure</a></li>
+      <li><a href="#technology">Technology</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="https://www.linkedin.com/company/REPLACE_ME" rel="noopener">LinkedIn</a></li>
+    </ul>
+    <p>© <span id="y"></span> Deep Signals. All rights reserved. Patent pending.</p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('y').textContent=new Date().getFullYear();
+(function(){const f=document.getElementById('pilot-form');if(!f)return;f.addEventListener('submit',e=>{if(f.action.includes('REPLACE_ME')){e.preventDefault();const n=f.querySelector('button');n.textContent='Form not connected yet — email uri@deepsignals.tech';n.disabled=true;}});})();
+function toggleMenu(b){const m=document.getElementById('menu');const o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)}
+document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('menu').classList.remove('open')}));
+
+/* Hero slideshow */
+(function(){
+  const sl=[...document.querySelectorAll('.slide')];if(!sl.length)return;
+  const caps=['Offshore exploration', 'Offshore wind', 'Ports and harbours', 'Onshore drilling', 'Subsea pipelines', 'Rail corridors', 'Tunnelling', 'Urban infrastructure'];
+  const cap=document.getElementById('cap');let i=0;
+  const show=n=>{sl.forEach((e,k)=>e.classList.toggle('on',k===n));if(cap)cap.textContent=caps[n]||''};
+  show(0);
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  setInterval(()=>{i=(i+1)%sl.length;show(i)},6000);
+})();
+/* Technology: a cross-section with a wavefront going down to a target and back. */
+(function(){
+  const c=document.getElementById('field');const ctx=c.getContext('2d');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W,H,dpr,t0=performance.now();
+  function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=c.clientWidth;H=c.clientHeight;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+  window.addEventListener('resize',resize);resize();
+  // layer boundaries as functions of x (gentle folds)
+  const layers=[0.30,0.42,0.53,0.64,0.74,0.86];
+  function yb(i,x){const b=layers[i]*H;return b+Math.sin(x/W*3.2+i*1.3)*H*0.018+Math.sin(x/W*9+i)*H*0.006}
+  const cols=['#10293F','#153650','#1A4262','#204B6C','#1C3B57','#14283A'];
+  const target={x:0.66,i:3,w:0.11};
+  function draw(now){
+    const t=(now-t0)/1000;
+    ctx.clearRect(0,0,W,H);
+    // water
+    const g=ctx.createLinearGradient(0,0,0,H*0.3);g.addColorStop(0,'#0C1E2E');g.addColorStop(1,'#0E2636');ctx.fillStyle=g;ctx.fillRect(0,0,W,H*0.32);
+    // layers
+    for(let i=0;i<layers.length;i++){
+      ctx.beginPath();ctx.moveTo(0,yb(i,0));
+      for(let x=0;x<=W;x+=12)ctx.lineTo(x,yb(i,x));
+      ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fillStyle=cols[i];ctx.fill();
+      ctx.beginPath();for(let x=0;x<=W;x+=12){const y=yb(i,x);x?ctx.lineTo(x,y):ctx.moveTo(x,y)}
+      ctx.strokeStyle='rgba(140,190,220,0.30)';ctx.lineWidth=1.2;ctx.stroke();
+    }
+    // target lens inside layer 3
+    const tx=target.x*W,ty=(yb(target.i,tx)+yb(target.i+1,tx))/2,tw=target.w*W,th=(yb(target.i+1,tx)-yb(target.i,tx))*0.5;
+    ctx.beginPath();ctx.ellipse(tx,ty,tw,th,0,0,Math.PI*2);
+    const tg=ctx.createRadialGradient(tx,ty,0,tx,ty,tw);tg.addColorStop(0,'rgba(233,168,59,0.55)');tg.addColorStop(1,'rgba(233,168,59,0.08)');ctx.fillStyle=tg;ctx.fill();
+    // source / vessel marker at surface
+    const sx=W*0.40;ctx.fillStyle='#E9A83B';ctx.fillRect(sx-14,H*0.30-4,28,4);
+    // wavefront: period 6 s; down 0-2.6, back 2.6-5.2, rest
+    if(!reduce){
+      const p=t%6.5;const T=2.6;
+      const drawFront=(r,alpha)=>{ctx.beginPath();ctx.arc(sx,H*0.30,r,0,Math.PI);ctx.strokeStyle='rgba(233,168,59,'+alpha+')';ctx.lineWidth=2;ctx.stroke();};
+      const R=Math.hypot(tx-sx,ty-H*0.30);
+      if(p<T){for(let k=0;k<3;k++){const r=(p/T)*R-k*18;if(r>0)drawFront(r,0.55-k*0.17)}}
+      else if(p<2*T){const q=(p-T)/T;// echo from target back up
+        for(let k=0;k<3;k++){const r=q*R-k*18;if(r>0){ctx.beginPath();ctx.arc(tx,ty,r,Math.PI,2*Math.PI);ctx.strokeStyle='rgba(233,168,59,'+(0.55-k*0.17)+')';ctx.lineWidth=2;ctx.stroke()}}
+        // target glows while answering
+        ctx.beginPath();ctx.ellipse(tx,ty,tw*(1+0.08*Math.sin(q*Math.PI)),th*(1+0.08*Math.sin(q*Math.PI)),0,0,Math.PI*2);ctx.strokeStyle='rgba(233,168,59,'+(0.6*Math.sin(q*Math.PI))+')';ctx.lineWidth=1.5;ctx.stroke();
+      }
+      requestAnimationFrame(draw);
+    } else {
+      // static: one front and the echo
+      drawFront(Math.hypot(tx-sx,ty-H*0.30)*0.6,0.45);
+    }
+    // vignette so text stays readable
+    const v=ctx.createLinearGradient(0,H*0.6,0,H);v.addColorStop(0,'rgba(12,30,46,0)');v.addColorStop(1,'rgba(12,30,46,0.75)');ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+  }
+  if(reduce)draw(t0);else requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
