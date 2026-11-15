@@ -137,7 +137,7 @@ header{position:sticky;top:0;z-index:20;background:rgba(12,30,46,.86);backdrop-f
 .alt{background:#fff}
 
 /* galleries */
-.gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:36px}
+.gallery{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:36px}
 .gallery figure,.single{margin:0}
 .gallery img,.single img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;display:block;border:1px solid var(--line)}
 .single img{aspect-ratio:16/9}
@@ -179,13 +179,13 @@ figcaption{font-size:.85rem;color:var(--ink-3);margin-top:8px;font-weight:600}
 .view img{width:100%;height:100%;object-fit:cover;display:block}
 .view.dark canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .field-note{position:absolute;left:24px;right:24px;bottom:20px;color:#C9D8E2;font-weight:600;max-width:46ch;text-shadow:0 1px 8px rgba(0,0,0,.6)}
-.lens{position:absolute;left:60%;top:38%;width:24%;height:15%;border-radius:50%;border:2px dashed rgba(255,255,255,.75);pointer-events:none}
+.lens{position:absolute;left:34%;top:27%;width:28%;height:17%;border-radius:50%;border:2px dashed rgba(255,255,255,.75);pointer-events:none}
 .lens.glow{border-style:solid;border-color:var(--sand);box-shadow:0 0 0 0 rgba(233,168,59,.0);opacity:0}
 .callout{position:absolute;background:rgba(255,255,255,.92);color:var(--ink);padding:8px 12px;border-radius:8px;font-size:.88rem;font-weight:600;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .callout b{color:var(--navy);margin-left:6px}
 .callout.unknown{background:var(--sand);color:var(--ocean)}
 .callout.unknown b{color:var(--ocean)}
-.c1{left:6%;top:12%}.c2{right:4%;top:14%}.c3{left:62%;top:60%}
+.c1{left:5%;top:10%}.c2{left:64%;top:18%}.c3{left:36%;top:50%}
 .side-text{padding:36px 32px;display:flex;flex-direction:column;gap:14px}
 .side-text h3{font-size:1.4rem}
 .side-text p{color:var(--ink-2)}
@@ -199,7 +199,7 @@ figcaption{font-size:.85rem;color:var(--ink-3);margin-top:8px;font-weight:600}
 @keyframes lensin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
 .stage.done .lens.glow{opacity:1;animation:pulse 2.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(233,168,59,.5)}50%{box-shadow:0 0 0 18px rgba(233,168,59,0)}}
-.verdict{position:absolute;left:4%;bottom:6%;width:52%}
+.verdict{position:absolute;right:4%;bottom:6%;width:50%}
 .vcard{background:rgba(12,30,46,.92);color:#fff;border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;border:1px solid rgba(255,255,255,.15)}
 .vcard.idle span{color:#9DB2C2;font-weight:600}
 .vcard .label{color:#9DB2C2;font-size:.85rem;font-weight:600}
@@ -208,8 +208,9 @@ figcaption{font-size:.85rem;color:var(--ink-3);margin-top:8px;font-weight:600}
 .vcard .conf{font-size:.85rem;color:#C9D8E2}
 .vcard.result{animation:popin .5s cubic-bezier(.2,.9,.3,1.2)}
 @keyframes popin{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
-.three-prospects .mini{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-weight:600;animation:popin .5s both}
+.three-prospects .mini{display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-weight:600;animation:popin .5s both}
 .three-prospects .mini:nth-child(3){animation-delay:.15s}.three-prospects .mini:nth-child(4){animation-delay:.3s}
+.three-prospects .mini img{width:96px;height:44px;object-fit:cover;object-position:48% 36%;border-radius:6px;border:1px solid var(--line)}
 .dot{width:14px;height:14px;border-radius:50%;display:inline-block}
 .dot.brine{background:#3382A3}.dot.fizz{background:#9DB2C2}.dot.gas{background:#E9A83B}
 .mini em{font-style:normal;font-weight:800;padding:4px 12px;border-radius:999px;font-size:.85rem}
@@ -279,6 +280,7 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
     <div class="slide" style="background-image:url(assets/img/train.jpg)"></div>
     <div class="slide" style="background-image:url(assets/img/tunnel2.jpg)"></div>
     <div class="slide" style="background-image:url(assets/img/tunnel1.jpg)"></div>
+    <div class="slide" style="background-image:url(assets/img/section-rainbow.jpg)"></div>
   </div>
   </div>
   <div class="hero-shade" aria-hidden="true"></div>
@@ -406,6 +408,7 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
       <figure><img src="assets/img/salt.jpg" alt="Seismic volume with a salt diapir" loading="lazy"><figcaption>Salt diapir</figcaption></figure>
       <figure><img src="assets/img/dhi.jpg" alt="Seismic volume showing a bright spot" loading="lazy"><figcaption>Direct hydrocarbon indicator</figcaption></figure>
       <figure><img src="assets/img/channel.jpg" alt="Time slice showing a channel system" loading="lazy"><figcaption>Channel system</figcaption></figure>
+      <figure><img src="assets/img/section-rainbow.jpg" alt="Seismic section with a salt dome" loading="lazy"><figcaption>Salt flank, 2D section</figcaption></figure>
     </div>
     <div class="cols">
       <div>
@@ -501,7 +504,7 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
 
       <div class="step on" data-panel="1">
         <div class="view">
-          <img src="assets/img/dhi.jpg" alt="Seismic volume showing a bright amplitude anomaly over a prospect">
+          <img src="assets/img/section-dhi.jpg" alt="Seismic section showing an anticline with a bright amplitude anomaly at the crest">
           <div class="lens" aria-hidden="true"></div>
           <div class="callout c1">Four-way closure <b>yes</b></div>
           <div class="callout c2">Amplitude anomaly <b>present</b></div>
@@ -530,7 +533,7 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
 
       <div class="step" data-panel="3">
         <div class="view">
-          <img src="assets/img/dhi.jpg" alt="The same seismic volume, now with a verdict">
+          <img src="assets/img/section-dhi.jpg" alt="The same seismic section, now with a verdict">
           <div class="sweep" aria-hidden="true"></div>
           <div class="lens glow" aria-hidden="true"></div>
           <div class="verdict" aria-live="polite">
@@ -542,10 +545,10 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
           <p>Not "what does it look like?" but "what is in it?"</p>
           <button class="btn btn-sand" id="run">Run Deep Signals on this prospect</button>
           <div class="three-prospects" id="three" hidden>
-            <p class="muted" style="margin:22px 0 10px">Three prospects that look identical on the image:</p>
-            <div class="mini"><span class="dot brine"></span><span>Brine</span><em class="nogo">No-go</em></div>
-            <div class="mini"><span class="dot fizz"></span><span>Fizz water</span><em class="nogo">No-go</em></div>
-            <div class="mini"><span class="dot gas"></span><span>Gas</span><em class="go">Go</em></div>
+            <p class="muted" style="margin:22px 0 10px">Three prospects that look the same on the image:</p>
+            <div class="mini"><img src="assets/img/section-brine.jpg" alt=""><span>Brine</span><em class="nogo">No-go</em></div>
+            <div class="mini"><img src="assets/img/section-fizz.jpg" alt=""><span>Fizz water</span><em class="nogo">No-go</em></div>
+            <div class="mini"><img src="assets/img/section-dhi.jpg" alt=""><span>Gas</span><em class="go">Go</em></div>
             <p class="muted" style="margin-top:14px;font-size:.9rem">Explainable: every verdict traces back to a physical cause. Patent pending; method under NDA.</p>
           </div>
         </div>
@@ -689,7 +692,7 @@ document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{
 /* Hero slideshow */
 (function(){
   const sl=[...document.querySelectorAll('.slide')];if(!sl.length)return;
-  const caps=['Offshore exploration', 'Offshore wind', 'Ports and harbours', 'Onshore drilling', 'Subsea pipelines', 'Rail corridors', 'Tunnelling', 'Urban infrastructure'];
+  const caps=['Offshore exploration', 'Offshore wind', 'Ports and harbours', 'Onshore drilling', 'Subsea pipelines', 'Rail corridors', 'Tunnelling', 'Urban infrastructure', 'Seismic interpretation'];
   const cap=document.getElementById('cap');let i=0;
   const show=n=>{sl.forEach((e,k)=>e.classList.toggle('on',k===n));if(cap)cap.textContent=caps[n]||''};
   show(0);
