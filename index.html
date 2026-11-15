@@ -712,6 +712,8 @@ document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{
   const cols=['#10293F','#153650','#1A4262','#204B6C','#1C3B57','#14283A'];
   const target={x:0.66,i:3,w:0.11};
   function draw(now){
+    if(!W||W!==c.clientWidth||H!==c.clientHeight)resize();
+    if(!W){requestAnimationFrame(draw);return;}
     const t=(now-t0)/1000;
     ctx.clearRect(0,0,W,H);
     // water
