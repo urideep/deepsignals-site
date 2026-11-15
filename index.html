@@ -493,7 +493,7 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
     <h2>Talk to us about a pilot.</h2>
     <p class="lead" style="margin-top:18px">We run a limited number of pilots each year. Tell us about your site or prospect and we will come back to you within two working days.</p>
     <div class="cols">
-      <form id="pilot-form" action="https://formspree.io/f/REPLACE_ME" method="POST">
+      <form id="pilot-form" action="https://formspree.io/f/mjywywva" method="POST">
         <div class="row2">
           <label>Name<input name="name" required autocomplete="name"></label>
           <label>Company<input name="company" required autocomplete="organization"></label>
@@ -502,6 +502,8 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
           <label>Role<input name="role"></label>
           <label>Email<input name="email" type="email" required autocomplete="email"></label>
         </div>
+        <input type="hidden" name="_subject" value="Pilot enquiry from deepsignals.tech">
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
         <label>Application
           <select name="application" required>
             <option value="">Choose one</option>
