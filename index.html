@@ -168,9 +168,54 @@ figcaption{font-size:.85rem;color:var(--ink-3);margin-top:8px;font-weight:600}
 
 /* technology */
 .tech .three{margin-top:48px}
-.field-wrap{position:relative;margin-top:40px;border-radius:var(--r);overflow:hidden;background:var(--ocean);aspect-ratio:16/7}
-.field-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.field-note{position:absolute;left:24px;bottom:20px;color:#C9D8E2;font-weight:600;max-width:36ch}
+
+.stage{margin-top:40px;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.steps-nav{display:flex;border-bottom:1px solid var(--line);background:var(--paper)}
+.steps-nav button{flex:1;padding:16px 12px;background:none;border:0;border-bottom:3px solid transparent;font:inherit;font-weight:700;color:var(--ink-3);cursor:pointer}
+.steps-nav button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--sand);background:#fff}
+.step{display:none;grid-template-columns:1.25fr .75fr;gap:0}
+.step.on{display:grid}
+.view{position:relative;aspect-ratio:16/10;background:var(--ocean);overflow:hidden}
+.view img{width:100%;height:100%;object-fit:cover;display:block}
+.view.dark canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.field-note{position:absolute;left:24px;right:24px;bottom:20px;color:#C9D8E2;font-weight:600;max-width:46ch;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.lens{position:absolute;left:60%;top:38%;width:24%;height:15%;border-radius:50%;border:2px dashed rgba(255,255,255,.75);pointer-events:none}
+.lens.glow{border-style:solid;border-color:var(--sand);box-shadow:0 0 0 0 rgba(233,168,59,.0);opacity:0}
+.callout{position:absolute;background:rgba(255,255,255,.92);color:var(--ink);padding:8px 12px;border-radius:8px;font-size:.88rem;font-weight:600;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.callout b{color:var(--navy);margin-left:6px}
+.callout.unknown{background:var(--sand);color:var(--ocean)}
+.callout.unknown b{color:var(--ocean)}
+.c1{left:6%;top:12%}.c2{right:4%;top:14%}.c3{left:62%;top:60%}
+.side-text{padding:36px 32px;display:flex;flex-direction:column;gap:14px}
+.side-text h3{font-size:1.4rem}
+.side-text p{color:var(--ink-2)}
+.side-text .stat{color:var(--ink)}
+.side-text .stat b{font-size:1.6rem;color:var(--navy);margin-right:6px}
+.side-text .btn{align-self:flex-start;margin-top:auto}
+.sweep{position:absolute;top:0;bottom:0;left:-20%;width:20%;background:linear-gradient(90deg,rgba(233,168,59,0),rgba(233,168,59,.55),rgba(233,168,59,0));opacity:0;pointer-events:none}
+.stage.running .sweep{animation:sweep 1.8s ease-in-out forwards;opacity:1}
+@keyframes sweep{from{left:-20%}to{left:100%}}
+.stage.running .lens.glow{animation:lensin .6s 1.6s forwards}
+@keyframes lensin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.stage.done .lens.glow{opacity:1;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(233,168,59,.5)}50%{box-shadow:0 0 0 18px rgba(233,168,59,0)}}
+.verdict{position:absolute;left:4%;bottom:6%;width:52%}
+.vcard{background:rgba(12,30,46,.92);color:#fff;border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;border:1px solid rgba(255,255,255,.15)}
+.vcard.idle span{color:#9DB2C2;font-weight:600}
+.vcard .label{color:#9DB2C2;font-size:.85rem;font-weight:600}
+.vcard .big{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+.vcard .go{background:#2EBD6B;color:#06240F;padding:8px 16px;border-radius:999px;font-weight:800;font-size:1.1rem}
+.vcard .conf{font-size:.85rem;color:#C9D8E2}
+.vcard.result{animation:popin .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes popin{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+.three-prospects .mini{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-weight:600;animation:popin .5s both}
+.three-prospects .mini:nth-child(3){animation-delay:.15s}.three-prospects .mini:nth-child(4){animation-delay:.3s}
+.dot{width:14px;height:14px;border-radius:50%;display:inline-block}
+.dot.brine{background:#3382A3}.dot.fizz{background:#9DB2C2}.dot.gas{background:#E9A83B}
+.mini em{font-style:normal;font-weight:800;padding:4px 12px;border-radius:999px;font-size:.85rem}
+.mini .nogo{background:#FBE4E4;color:#9E1B1B}.mini .go{background:#DFF5E8;color:#116B38}
+@media(max-width:860px){.step.on{grid-template-columns:1fr}.steps-nav button{font-size:.8rem;padding:12px 6px}.callout{font-size:.78rem}}
+@media(prefers-reduced-motion:reduce){.stage.running .sweep,.stage.running .lens.glow,.stage.done .lens.glow,.vcard.result,.three-prospects .mini{animation:none;opacity:1}}
 .rigour{margin-top:56px;padding:32px;border-left:4px solid var(--sand);background:#fff;border-radius:0 var(--r) var(--r) 0}
 .rigour p{color:var(--ink-2);max-width:70ch}
 
@@ -444,23 +489,69 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
 
 <section class="tech" id="technology">
   <div class="wrap">
-    <h2>Physics first. Then the AI.</h2>
-    <p class="lead" style="margin-top:18px">What makes a Deep Signals answer different from an interpretation.</p>
-    <div class="field-wrap"><canvas id="field" aria-label="Animation: a wave travels from the surface down to a target layer and back"></canvas><div class="field-note">The signal goes down to the target and comes back. We read what came back.</div></div>
-    <div class="three">
-      <div>
-        <h3>The picture is not the answer</h3>
-        <p>Conventional workflows process seismic into an image of layer geometry, then interpret it. The information about what is inside the target is distorted by everything above it, and partly discarded on the way to the image.</p>
+    <h2>The picture is not the answer.</h2>
+    <p class="lead" style="margin-top:18px">Every seismic image shows the shape of the rock. None of them shows what is in it. Here is the difference, on one prospect.</p>
+
+    <div class="stage" id="stage">
+      <div class="steps-nav" role="tablist">
+        <button role="tab" aria-selected="true" data-step="1">1 · What the image shows</button>
+        <button role="tab" aria-selected="false" data-step="2">2 · What the signal carries</button>
+        <button role="tab" aria-selected="false" data-step="3">3 · The verdict</button>
       </div>
-      <div>
-        <h3>We go to the target and back</h3>
-        <p>Our models work on the raw, pre-stack wavefield and account for the full path of the sound — down through the overburden to the target and back to the surface — so the target's own response can be read.</p>
+
+      <div class="step on" data-panel="1">
+        <div class="view">
+          <img src="assets/img/dhi.jpg" alt="Seismic volume showing a bright amplitude anomaly over a prospect">
+          <div class="lens" aria-hidden="true"></div>
+          <div class="callout c1">Four-way closure <b>yes</b></div>
+          <div class="callout c2">Amplitude anomaly <b>present</b></div>
+          <div class="callout c3 unknown">Fluid in the trap <b>unknown</b></div>
+        </div>
+        <div class="side-text">
+          <h3>This is what an interpreter sees.</h3>
+          <p>A good structure and a bright reflector. It could be gas. It could be brine. It could be water with a few percent of gas in it — which looks just like gas and is worth nothing. The industry resolves this question the expensive way: by drilling.</p>
+          <p class="stat"><b>&gt;75%</b> of exploration wells drilled on pictures like this come up dry.</p>
+          <button class="btn btn-navy" data-go="2">Next: what the signal carries</button>
+        </div>
       </div>
-      <div>
-        <h3>Physics makes it explainable</h3>
-        <p>Because the models are built on wave propagation and rock physics, every output can be traced to a physical cause. No well logs are needed, which is why it works where nothing has been drilled.</p>
+
+      <div class="step" data-panel="2">
+        <div class="view dark">
+          <canvas id="field" aria-label="Animation: a wave travels from the surface down to a target layer and back"></canvas>
+          <div class="field-note">The sound goes down to the target and comes back. Everything about the target is in what comes back — buried under everything above it.</div>
+        </div>
+        <div class="side-text">
+          <h3>The answer is already in the data.</h3>
+          <p>Before the image is made, the recorded wavefield carries the target's own response: how it absorbed the sound, how it returned it. Conventional processing flattens that into a picture and throws most of it away.</p>
+          <p>Deep Signals works on the raw, pre-stack data and follows the physics all the way to the target and back. No well logs. No calibration wells. Just the physics and the data you already have.</p>
+          <button class="btn btn-navy" data-go="3">Next: the verdict</button>
+        </div>
+      </div>
+
+      <div class="step" data-panel="3">
+        <div class="view">
+          <img src="assets/img/dhi.jpg" alt="The same seismic volume, now with a verdict">
+          <div class="sweep" aria-hidden="true"></div>
+          <div class="lens glow" aria-hidden="true"></div>
+          <div class="verdict" aria-live="polite">
+            <div class="vcard idle"><span>Ready.</span></div>
+          </div>
+        </div>
+        <div class="side-text">
+          <h3>Same data. A different question.</h3>
+          <p>Not "what does it look like?" but "what is in it?"</p>
+          <button class="btn btn-sand" id="run">Run Deep Signals on this prospect</button>
+          <div class="three-prospects" id="three" hidden>
+            <p class="muted" style="margin:22px 0 10px">Three prospects that look identical on the image:</p>
+            <div class="mini"><span class="dot brine"></span><span>Brine</span><em class="nogo">No-go</em></div>
+            <div class="mini"><span class="dot fizz"></span><span>Fizz water</span><em class="nogo">No-go</em></div>
+            <div class="mini"><span class="dot gas"></span><span>Gas</span><em class="go">Go</em></div>
+            <p class="muted" style="margin-top:14px;font-size:.9rem">Explainable: every verdict traces back to a physical cause. Patent pending; method under NDA.</p>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="rigour">
       <h3>Rigour</h3>
       <p style="margin-top:10px">Our models are developed and validated against physically rigorous simulated surveys before they meet field data, and benchmarked against drilling outcomes in pilots. Patent pending: we do not publish the method, and we are happy to discuss it under NDA.</p>
@@ -570,6 +661,25 @@ document.getElementById('y').textContent=new Date().getFullYear();
 function toggleMenu(b){const m=document.getElementById('menu');const o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)}
 document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('menu').classList.remove('open')}));
 
+/* Technology stage */
+(function(){
+  const st=document.getElementById('stage');if(!st)return;
+  const tabs=[...st.querySelectorAll('[role=tab]')],panels=[...st.querySelectorAll('.step')];
+  const show=n=>{tabs.forEach(t=>t.setAttribute('aria-selected',t.dataset.step==n));panels.forEach(p=>p.classList.toggle('on',p.dataset.panel==n));};
+  tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.step)));
+  st.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{show(b.dataset.go);st.scrollIntoView({behavior:'smooth',block:'start'})}));
+  const run=document.getElementById('run'),v=st.querySelector('.verdict'),three=document.getElementById('three');
+  run.addEventListener('click',()=>{
+    if(st.classList.contains('running'))return;
+    st.classList.add('running');run.disabled=true;run.textContent='Reading the target…';
+    v.innerHTML='<div class="vcard idle"><span>Following the signal to the target and back…</span></div>';
+    setTimeout(()=>{
+      st.classList.remove('running');st.classList.add('done');
+      v.innerHTML='<div class="vcard result"><div><div class="label">Fluid in the trap</div><div class="big">Gas — commercial reservoir</div><div class="conf">Explainable · no well logs used</div></div><div class="go">GO</div></div>';
+      three.hidden=false;run.textContent='Verdict delivered';
+    },2300);
+  });
+})();
 /* Optional ambient sound (off by default, user opt-in) */
 (function(){const b=document.getElementById('sound'),a=document.getElementById('ambient');if(!b||!a)return;a.volume=0.3;
   b.addEventListener('click',async()=>{const on=b.getAttribute('aria-pressed')==='true';
