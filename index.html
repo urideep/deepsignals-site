@@ -751,11 +751,12 @@ document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{
 (function(){const b=document.getElementById('sound'),a=document.getElementById('ambient');if(!b||!a)return;a.volume=0.3;
   let pref=null;try{pref=localStorage.getItem('ds-music')}catch(e){}
   const setUI=on=>{b.setAttribute('aria-pressed',on?'true':'false');b.setAttribute('aria-label',on?'Turn music off':'Turn music on')};
-  const tryPlay=async()=>{try{await a.play();setUI(true);return true}catch(e){return false}};
-  const armFirstGesture=()=>{const h=()=>{tryPlay();['pointerdown','keydown','touchstart','wheel','scroll'].forEach(ev=>window.removeEventListener(ev,h))};['pointerdown','keydown','touchstart','wheel','scroll'].forEach(ev=>window.addEventListener(ev,h,{passive:true}))};
-  if(pref!=='off'){setUI(true);tryPlay().then(ok=>{if(!ok)armFirstGesture()})}
-  b.addEventListener('click',async e=>{e.stopPropagation();const on=b.getAttribute('aria-pressed')==='true';
-    if(on){a.pause();setUI(false);try{localStorage.setItem('ds-music','off')}catch(x){}}
+  const tryPlay=async()=>{try{await a.play();setUI(true);return true}catch(e){setUI(false);return false}};
+  const evs=['pointerdown','keydown','touchstart','wheel'];
+  const h=ev=>{if(ev.target&&ev.target.closest&&ev.target.closest('#sound'))return;if(a.paused)tryPlay();evs.forEach(e=>window.removeEventListener(e,h))};
+  if(pref!=='off'){tryPlay().then(ok=>{if(!ok)evs.forEach(e=>window.addEventListener(e,h,{passive:true}))})}
+  b.addEventListener('click',async()=>{
+    if(!a.paused){a.pause();setUI(false);try{localStorage.setItem('ds-music','off')}catch(x){}evs.forEach(e=>window.removeEventListener(e,h));}
     else{if(await tryPlay()){try{localStorage.setItem('ds-music','on')}catch(x){}}}
   });})();
 /* Hero slideshow */
