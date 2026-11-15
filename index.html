@@ -61,6 +61,11 @@ header{position:sticky;top:0;z-index:20;background:rgba(12,30,46,.86);backdrop-f
 .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.6s ease;transform:scale(1.04)}
 .slide.on{opacity:1;transform:scale(1);transition:opacity 1.6s ease,transform 7s linear}
 .hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,30,46,.92) 0%,rgba(12,30,46,.6) 45%,rgba(12,30,46,.1) 100%),linear-gradient(0deg,rgba(12,30,46,.85) 0%,rgba(12,30,46,0) 45%)}
+.sound{position:absolute;left:24px;bottom:16px;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(12,30,46,.5);color:#C9D8E2;font:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
+.sound:hover{border-color:#fff;color:#fff}
+.sound .w1,.sound .w2{opacity:0}.sound .off{opacity:1}
+.sound[aria-pressed="true"] .w1,.sound[aria-pressed="true"] .w2{opacity:1}.sound[aria-pressed="true"] .off{opacity:0}
+.sound[aria-pressed="true"]{border-color:var(--sand);color:var(--sand)}
 .hero .caption{position:absolute;right:24px;bottom:18px;color:#9DB2C2;font-size:.82rem;font-weight:600}
 @media(prefers-reduced-motion:reduce){.slide{transition:none;transform:none}}
 .hero .wrap{position:relative;padding-top:140px;padding-bottom:72px}
@@ -246,6 +251,10 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
     </div>
   </div>
   <div class="caption" id="cap"></div>
+  <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Turn music on">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="w1" d="M15.5 8.5a5 5 0 0 1 0 7"/><path class="w2" d="M19 5a9 9 0 0 1 0 14"/><line class="off" x1="22" y1="2" x2="2" y2="22"/></svg><span>Music</span>
+  </button>
+  <audio id="ambient" src="assets/music.mp3" loop preload="none"></audio>
 </section>
 
 <section class="router">
@@ -561,6 +570,12 @@ document.getElementById('y').textContent=new Date().getFullYear();
 function toggleMenu(b){const m=document.getElementById('menu');const o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)}
 document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('menu').classList.remove('open')}));
 
+/* Optional ambient sound (off by default, user opt-in) */
+(function(){const b=document.getElementById('sound'),a=document.getElementById('ambient');if(!b||!a)return;a.volume=0.3;
+  b.addEventListener('click',async()=>{const on=b.getAttribute('aria-pressed')==='true';
+    if(on){a.pause();b.setAttribute('aria-pressed','false');b.setAttribute('aria-label','Turn music on');}
+    else{try{await a.play();b.setAttribute('aria-pressed','true');b.setAttribute('aria-label','Turn music off');}catch(e){}}
+  });})();
 /* Hero slideshow */
 (function(){
   const sl=[...document.querySelectorAll('.slide')];if(!sl.length)return;
