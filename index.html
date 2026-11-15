@@ -315,7 +315,7 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
     </div>
   </div>
   <div class="caption" id="cap"></div>
-  <button class="sound" id="sound" type="button" aria-pressed="true" aria-label="Turn music off">
+  <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Turn music on">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="w1" d="M15.5 8.5a5 5 0 0 1 0 7"/><path class="w2" d="M19 5a9 9 0 0 1 0 14"/><line class="off" x1="22" y1="2" x2="2" y2="22"/></svg><span>Music</span>
   </button>
   <audio id="ambient" src="assets/music.mp3" loop preload="auto"></audio>
@@ -750,14 +750,19 @@ document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{
 /* Optional ambient sound (off by default, user opt-in) */
 (function(){const b=document.getElementById('sound'),a=document.getElementById('ambient');if(!b||!a)return;a.volume=0.3;
   let pref=null;try{pref=localStorage.getItem('ds-music')}catch(e){}
-  const setUI=on=>{b.setAttribute('aria-pressed',on?'true':'false');b.setAttribute('aria-label',on?'Turn music off':'Turn music on')};
-  const tryPlay=async()=>{try{await a.play();setUI(true);return true}catch(e){setUI(false);return false}};
-  const evs=['pointerdown','keydown','touchstart','wheel'];
-  const h=ev=>{if(ev.target&&ev.target.closest&&ev.target.closest('#sound'))return;if(a.paused)tryPlay();evs.forEach(e=>window.removeEventListener(e,h))};
-  if(pref!=='off'){tryPlay().then(ok=>{if(!ok)evs.forEach(e=>window.addEventListener(e,h,{passive:true}))})}
+  let playing=false;
+  const setUI=on=>{playing=on;b.setAttribute('aria-pressed',on?'true':'false');b.setAttribute('aria-label',on?'Turn music off':'Turn music on')};
+  const start=async()=>{try{a.pause();a.currentTime=0;await a.play();setUI(true);return true}catch(e){setUI(false);return false}};
+  const stop=()=>{a.pause();setUI(false)};
+  const evs=['pointerdown','keydown','touchend'];
+  const h=ev=>{if(ev.target&&ev.target.closest&&ev.target.closest('#sound'))return;evs.forEach(e=>window.removeEventListener(e,h));if(pref!=='off'&&!playing)start()};
+  // Never autoplay on landing: browsers either block it or play it silently. Wait for the first real interaction.
+  setUI(false);
+  if(pref!=='off')evs.forEach(e=>window.addEventListener(e,h,{passive:true}));
   b.addEventListener('click',async()=>{
-    if(!a.paused){a.pause();setUI(false);try{localStorage.setItem('ds-music','off')}catch(x){}evs.forEach(e=>window.removeEventListener(e,h));}
-    else{if(await tryPlay()){try{localStorage.setItem('ds-music','on')}catch(x){}}}
+    evs.forEach(e=>window.removeEventListener(e,h));
+    if(playing){stop();try{localStorage.setItem('ds-music','off')}catch(x){}}
+    else{if(await start()){try{localStorage.setItem('ds-music','on')}catch(x){}}}
   });})();
 /* Hero slideshow */
 (function(){
