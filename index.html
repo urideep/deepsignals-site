@@ -169,6 +169,22 @@ figcaption{font-size:.85rem;color:var(--ink-3);margin-top:8px;font-weight:600}
 /* technology */
 .tech .three{margin-top:48px}
 
+.mode-switch{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);background:#fff;font-weight:600;color:var(--ink-3)}
+.mode-switch button{font:inherit;font-weight:700;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink-2);cursor:pointer}
+.mode-switch button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stage[data-mode="exp"] .m-inf{display:none!important}
+.stage[data-mode="inf"] .m-exp{display:none!important}
+.stage[data-mode="inf"] .verdict{left:4%;right:auto;width:54%}
+.c4{left:5%;top:10%}.c5{left:40%;top:50%}
+.column{position:absolute;left:66%;top:20%;width:13%;height:64%;display:flex;flex-direction:column;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35);opacity:0;transform:scaleY(0);transform-origin:top}
+.stage.done .column{animation:growcol 1s .2s forwards cubic-bezier(.2,.8,.3,1)}
+@keyframes growcol{to{opacity:1;transform:scaleY(1)}}
+.lay{flex:1;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#14202B;text-align:center;padding:4px}
+.lay.sand{background:#F0D27A}.lay.dense{background:#D9B14C}.lay.clay{background:#B9C4CC}.lay.rock{background:#A67C52;color:#fff;flex:1.4}
+.dot.sand{background:#F0D27A}.dot.dense{background:#D9B14C}.dot.clay{background:#B9C4CC}
+.infra-result .mini{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-weight:600;animation:popin .5s both}
+.infra-result .mini em{font-style:normal;font-weight:800;padding:4px 12px;border-radius:999px;font-size:.8rem}
+.infra-result .mini .go{background:#DFF5E8;color:#116B38}.infra-result .mini .nogo{background:var(--paper-2);color:var(--navy)}
 .stage{margin-top:40px;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .steps-nav{display:flex;border-bottom:1px solid var(--line);background:var(--paper)}
 .steps-nav button{flex:1;padding:16px 12px;background:none;border:0;border-bottom:3px solid transparent;font:inherit;font-weight:700;color:var(--ink-3);cursor:pointer}
@@ -495,7 +511,12 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
     <h2>The picture is not the answer.</h2>
     <p class="lead" style="margin-top:18px">Every seismic image shows the shape of the rock. None of them shows what is in it. Here is the difference, on one prospect.</p>
 
-    <div class="stage" id="stage">
+    <div class="stage" id="stage" data-mode="exp">
+      <div class="mode-switch" role="group" aria-label="Application">
+        <span>Show it for:</span>
+        <button type="button" data-mode="exp" aria-pressed="true">Exploration</button>
+        <button type="button" data-mode="inf" aria-pressed="false">Infrastructure</button>
+      </div>
       <div class="steps-nav" role="tablist">
         <button role="tab" aria-selected="true" data-step="1">1 · What the image shows</button>
         <button role="tab" aria-selected="false" data-step="2">2 · What the signal carries</button>
@@ -504,16 +525,26 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
 
       <div class="step on" data-panel="1">
         <div class="view">
-          <img src="assets/img/section-dhi.jpg" alt="Seismic section showing an anticline with a bright amplitude anomaly at the crest">
-          <div class="lens" aria-hidden="true"></div>
-          <div class="callout c1">Four-way closure <b>yes</b></div>
-          <div class="callout c2">Amplitude anomaly <b>present</b></div>
-          <div class="callout c3 unknown">Fluid in the trap <b>unknown</b></div>
+          <img class="m-exp" src="assets/img/section-dhi.jpg" alt="Seismic section showing an anticline with a bright amplitude anomaly at the crest">
+          <img class="m-inf" src="assets/img/shallow.jpg" alt="Shallow seismic volume under a seabed with three boreholes">
+          <div class="lens m-exp" aria-hidden="true"></div>
+          <div class="callout c1 m-exp">Four-way closure <b>yes</b></div>
+          <div class="callout c2 m-exp">Amplitude anomaly <b>present</b></div>
+          <div class="callout c3 unknown m-exp">Fluid in the trap <b>unknown</b></div>
+          <div class="callout c4 m-inf">Boreholes <b>sparse, hundreds of metres apart</b></div>
+          <div class="callout c5 unknown m-inf">Ground between them <b>unknown</b></div>
         </div>
         <div class="side-text">
+          <div class="m-exp">
           <h3>This is what an interpreter sees.</h3>
           <p>A good structure and a bright reflector. It could be gas. It could be brine. It could be water with a few percent of gas in it — which looks just like gas and is worth nothing. The industry resolves this question the expensive way: by drilling.</p>
           <p class="stat"><b>&gt;75%</b> of exploration wells drilled on pictures like this come up dry.</p>
+          </div>
+          <div class="m-inf">
+          <h3>This is what a site investigation delivers.</h3>
+          <p>A handful of boreholes, each a precise column of soil data, each costing tens of thousands of dollars and days of vessel time. Between them: a geophysical survey that shows layer geometry, and a design engineer's assumption about what the layers are.</p>
+          <p class="stat"><b>1.5–7%</b> of an offshore project's cost goes to boreholes that say nothing about the ground between them.</p>
+          </div>
           <button class="btn btn-navy" data-go="2">Next: what the signal carries</button>
         </div>
       </div>
@@ -524,27 +555,54 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
           <div class="field-note">The sound goes down to the target and comes back. Everything about the target is in what comes back — buried under everything above it.</div>
         </div>
         <div class="side-text">
+          <div class="m-exp">
           <h3>The answer is already in the data.</h3>
           <p>Before the image is made, the recorded wavefield carries the target's own response: how it absorbed the sound, how it returned it. Conventional processing flattens that into a picture and throws most of it away.</p>
           <p>Deep Signals works on the raw, pre-stack data and follows the physics all the way to the target and back. No well logs. No calibration wells. Just the physics and the data you already have.</p>
+          </div>
+          <div class="m-inf">
+          <h3>Every layer answers back.</h3>
+          <p>Sound entering the seabed passes through each layer and part of it returns. The raw record carries, layer by layer, how each one absorbed and returned the signal — and that depends on what the layer is made of and how stiff it is.</p>
+          <p>Deep Signals reads that record from the seabed down, calibrated on the site's own boreholes, and carries the answer across the whole survey. Fewer boreholes, placed where they matter.</p>
+          </div>
           <button class="btn btn-navy" data-go="3">Next: the verdict</button>
         </div>
       </div>
 
       <div class="step" data-panel="3">
         <div class="view">
-          <img src="assets/img/section-dhi.jpg" alt="The same seismic section, now with a verdict">
+          <img class="m-exp" src="assets/img/section-dhi.jpg" alt="The same seismic section, now with a verdict">
+          <img class="m-inf" src="assets/img/shallow.jpg" alt="The shallow volume, now with the ground between the boreholes classified">
           <div class="sweep" aria-hidden="true"></div>
-          <div class="lens glow" aria-hidden="true"></div>
+          <div class="lens glow m-exp" aria-hidden="true"></div>
+          <div class="column m-inf" aria-hidden="true">
+            <div class="lay sand"><span>Fine sand</span></div>
+            <div class="lay dense"><span>Dense fine sand</span></div>
+            <div class="lay clay"><span>Clay</span></div>
+            <div class="lay rock"><span>Shell gravel / rock</span></div>
+          </div>
           <div class="verdict" aria-live="polite">
             <div class="vcard idle"><span>Ready.</span></div>
           </div>
         </div>
         <div class="side-text">
+          <div class="m-exp">
           <h3>Same data. A different question.</h3>
           <p>Not "what does it look like?" but "what is in it?"</p>
+          </div>
+          <div class="m-inf">
+          <h3>Same survey. A virtual borehole every few metres.</h3>
+          <p>Soil type and strength between the physical boreholes, layer by layer from the seabed down.</p>
+          </div>
           <button class="btn btn-sand" id="run">Run Deep Signals on this prospect</button>
-          <div class="three-prospects" id="three" hidden>
+          <div class="infra-result m-inf" id="infra" hidden>
+            <p class="muted" style="margin:22px 0 10px">What the project gets:</p>
+            <div class="mini"><span class="dot sand"></span><span>Soil type and strength between boreholes</span><em class="go">Mapped</em></div>
+            <div class="mini"><span class="dot dense"></span><span>Boreholes needed</span><em class="go">Fewer, better placed</em></div>
+            <div class="mini"><span class="dot clay"></span><span>Low model confidence?</span><em class="nogo">Original plan, no penalty</em></div>
+            <p class="muted" style="margin-top:14px;font-size:.9rem">Calibrated on the site's own boreholes. Sea trial: 94% correct soil classification. Pilot in execution with Israel Ports Company.</p>
+          </div>
+          <div class="three-prospects m-exp" id="three" hidden>
             <p class="muted" style="margin:22px 0 10px">Three prospects that look the same on the image:</p>
             <div class="mini"><img src="assets/img/section-brine.jpg" alt=""><span>Brine</span><em class="nogo">No-go</em></div>
             <div class="mini"><img src="assets/img/section-fizz.jpg" alt=""><span>Fizz water</span><em class="nogo">No-go</em></div>
@@ -671,15 +729,20 @@ document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{
   const show=n=>{tabs.forEach(t=>t.setAttribute('aria-selected',t.dataset.step==n));panels.forEach(p=>p.classList.toggle('on',p.dataset.panel==n));};
   tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.step)));
   st.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{show(b.dataset.go);st.scrollIntoView({behavior:'smooth',block:'start'})}));
-  const run=document.getElementById('run'),v=st.querySelector('.verdict'),three=document.getElementById('three');
+  const run=document.getElementById('run'),v=st.querySelector('.verdict'),three=document.getElementById('three'),infra=document.getElementById('infra');
+  const labels={exp:'Run Deep Signals on this prospect',inf:'Run Deep Signals on this site'};
+  const reset=()=>{st.classList.remove('running','done');run.disabled=false;run.textContent=labels[st.dataset.mode];v.innerHTML='<div class="vcard idle"><span>Ready.</span></div>';three.hidden=true;infra.hidden=true;};
+  st.querySelectorAll('.mode-switch button').forEach(b=>b.addEventListener('click',()=>{st.dataset.mode=b.dataset.mode;st.querySelectorAll('.mode-switch button').forEach(x=>x.setAttribute('aria-pressed',x===b));reset();}));
   run.addEventListener('click',()=>{
     if(st.classList.contains('running'))return;
-    st.classList.add('running');run.disabled=true;run.textContent='Reading the target…';
-    v.innerHTML='<div class="vcard idle"><span>Following the signal to the target and back…</span></div>';
+    const inf=st.dataset.mode==='inf';
+    st.classList.add('running');run.disabled=true;run.textContent=inf?'Reading the seabed, layer by layer…':'Reading the target…';
+    v.innerHTML='<div class="vcard idle"><span>'+(inf?'Following the signal through each layer and back…':'Following the signal to the target and back…')+'</span></div>';
     setTimeout(()=>{
       st.classList.remove('running');st.classList.add('done');
-      v.innerHTML='<div class="vcard result"><div><div class="label">Fluid in the trap</div><div class="big">Gas — commercial reservoir</div><div class="conf">Explainable · no well logs used</div></div><div class="go">GO</div></div>';
-      three.hidden=false;run.textContent='Verdict delivered';
+      if(inf){v.innerHTML='<div class="vcard result"><div><div class="label">Between the boreholes</div><div class="big">Soil type and strength, every layer</div><div class="conf">Explainable · calibrated on the site\'s own boreholes</div></div><div class="go">MAPPED</div></div>';infra.hidden=false;}
+      else{v.innerHTML='<div class="vcard result"><div><div class="label">Fluid in the trap</div><div class="big">Gas — commercial reservoir</div><div class="conf">Explainable · no well logs used</div></div><div class="go">GO</div></div>';three.hidden=false;}
+      run.textContent=inf?'Site mapped':'Verdict delivered';
     },2300);
   });
 })();
