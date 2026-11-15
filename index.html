@@ -179,7 +179,8 @@ figcaption{font-size:.85rem;color:var(--ink-3);margin-top:8px;font-weight:600}
 .column{position:absolute;left:66%;top:20%;width:13%;height:64%;display:flex;flex-direction:column;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35);opacity:0;transform:scaleY(0);transform-origin:top}
 .stage.done .column{animation:growcol 1s .2s forwards cubic-bezier(.2,.8,.3,1)}
 @keyframes growcol{to{opacity:1;transform:scaleY(1)}}
-.lay{flex:1;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#14202B;text-align:center;padding:4px}
+.lay{flex:1;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#14202B;text-align:center;padding:4px;line-height:1.2}
+.lay small{display:block;font-size:.66rem;font-weight:600;opacity:.8;margin-top:2px}
 .lay.sand{background:#F0D27A}.lay.dense{background:#D9B14C}.lay.clay{background:#B9C4CC}.lay.rock{background:#A67C52;color:#fff;flex:1.4}
 .dot.sand{background:#F0D27A}.dot.dense{background:#D9B14C}.dot.clay{background:#B9C4CC}
 .infra-result .mini{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-weight:600;animation:popin .5s both}
@@ -576,10 +577,10 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
           <div class="sweep" aria-hidden="true"></div>
           <div class="lens glow m-exp" aria-hidden="true"></div>
           <div class="column m-inf" aria-hidden="true">
-            <div class="lay sand"><span>Fine sand</span></div>
-            <div class="lay dense"><span>Dense fine sand</span></div>
-            <div class="lay clay"><span>Clay</span></div>
-            <div class="lay rock"><span>Shell gravel / rock</span></div>
+            <div class="lay sand"><span>Fine sand<small>SPT N 14</small></span></div>
+            <div class="lay dense"><span>Dense fine sand<small>SPT N 32</small></span></div>
+            <div class="lay clay"><span>Clay<small>SPT N 8</small></span></div>
+            <div class="lay rock"><span>Shell gravel / rock<small>SPT N 50+</small></span></div>
           </div>
           <div class="verdict" aria-live="polite">
             <div class="vcard idle"><span>Ready.</span></div>
@@ -597,10 +598,10 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;gap:22px;flex-wrap:wra
           <button class="btn btn-sand" id="run">Run Deep Signals on this prospect</button>
           <div class="infra-result m-inf" id="infra" hidden>
             <p class="muted" style="margin:22px 0 10px">What the project gets:</p>
-            <div class="mini"><span class="dot sand"></span><span>Soil type and strength between boreholes</span><em class="go">Mapped</em></div>
+            <div class="mini"><span class="dot sand"></span><span>Soil type and SPT-equivalent strength between boreholes</span><em class="go">Mapped</em></div>
             <div class="mini"><span class="dot dense"></span><span>Boreholes needed</span><em class="go">Fewer, better placed</em></div>
             <div class="mini"><span class="dot clay"></span><span>Low model confidence?</span><em class="nogo">Original plan, no penalty</em></div>
-            <p class="muted" style="margin-top:14px;font-size:.9rem">Calibrated on the site's own boreholes. Sea trial: 94% correct soil classification. Pilot in execution with Israel Ports Company.</p>
+            <p class="muted" style="margin-top:14px;font-size:.9rem">Illustrative column and SPT values. Calibrated on the site's own boreholes. Sea trial: 94% correct soil classification. Pilot in execution with Israel Ports Company.</p>
           </div>
           <div class="three-prospects m-exp" id="three" hidden>
             <p class="muted" style="margin:22px 0 10px">Three prospects that look the same on the image:</p>
